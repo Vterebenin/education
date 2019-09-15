@@ -1,18 +1,24 @@
 console.log("test")
 
-
-//  "a2", "a3", "a5", "a6", "a1",
+const mainArr = [
+    ["a2", "a3", "a5", "a4", "a1"],
+    ["a4", "a5", "a2", "a1", "a3"],
+    ["a2", "a1", "a4", "a5", "a3"],
+    ["a4", "a5", "a2", "a3", "a1"],
+    ["a2", "a5", "a3", "a1", "a4"],
+]
+// "a1" "a2" "a3" "a4" "a5",
 const arrNumb = [
     // 1 эксперт
-    [5, 1, 2, 0, 3, 4],
+    [5, 1, 2, 4, 3],
     // 2 эксперт
-    [4, 3, 5, 1, 2, 0],
+    [4, 3, 5, 1, 2],
     // 3 эксперт
-    [0, 1, 5, 3, 4, 2],
+    [2, 1, 5, 3, 4],
     // 4 эксперт
-    [5, 3, 4, 1, 0, 2],
+    [5, 3, 4, 1, 2],
     // 5 эксперт
-    [4, 1, 0, 5, 2, 3],
+    [4, 1, 3, 5, 2],
 ]
 
 console.log(arrNumb, "изначальный массив")
@@ -71,17 +77,17 @@ function findCol(colNumber) {
                 colArr.push(element1)
             }
         }
-        
+
     }
     return colArr
-    
+
 }
 
 function calcMedian(ar1) {
     var half = Math.floor(ar1.length / 2);
-    
+
     ar1.sort(function (a, b) { return a - b; });
-    
+
     if (ar1.length % 2) {
         return ar1[half];
     } else {
@@ -92,7 +98,7 @@ function calcMedian(ar1) {
 
 const medianArr = []
 const medianArrTemp = []
-for (let i = 1; i < arrNumb.length+1; i++) {
+for (let i = 1; i < arrNumb.length + 1; i++) {
     arrForMedian = findCol(i)
     mediana = calcMedian(arrForMedian)
     medianArr.push(mediana)
@@ -106,21 +112,55 @@ console.log(medianArrTemp, "отсортированный")
 // ********************************
 //  подсчет рангов по методу кемени
 // ********************************
-const mainArr = [
-    ["a2", "a3", "a5", "a6", "a1"],
+const mainArrForKemeny = [
+    ["a2", "a3", "a5", "a4", "a1"],
     ["a4", "a5", "a2", "a1", "a3"],
-    ["a2", "a6", "a4", "a5", "a3"],
-    ["a4", "a6", "a2", "a3", "a1"],
-    ["a2", "a5", "a6", "a1", "a4"],
+    ["a2", "a1", "a4", "a5", "a3"],
+    ["a4", "a5", "a2", "a3", "a1"],
+    ["a2", "a5", "a3", "a1", "a4"],
 ]
-const mainArrKemeny = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-]
+// функция для создания парных матриц отношений
+function createPairwiseMatrix(rangeArr = ["a2", "a3", "a5", "a4", "a1"]) {
+    console.log(rangeArr, "pairwise");
+
+    let pairwiseMatrix = [
+        // a1, a2, a3, a4, a5 
+        // a1
+        [0, 0, 0, 0, 0],
+        // a2
+        [0, 0, 0, 0, 0],
+        // a3
+        [0, 0, 0, 0, 0],
+        // a4
+        [0, 0, 0, 0, 0],
+        // a5
+        [0, 0, 0, 0, 0],
+    ]
+    const mapPairWise = pairwiseMatrix.map((range, i) => {
+        currentRowA = `a${i+1}`
+        return range.map((value, i) => {
+            const currentColA = `a${i + 1}`
+            // console.log(rangeArr, "list")
+            // console.log(currentColA, "col")
+            // console.log(currentRowA, "row")
+            const indexOfCurrentCol = rangeArr.indexOf(currentColA)
+            const indexOfCurrentRow = rangeArr.indexOf(currentRowA)
+            // console.log(indexOfCurrentCol, "index of col");
+            // console.log(indexOfCurrentRow, "index of row");
+            const srav = +(indexOfCurrentRow >= indexOfCurrentCol) 
+
+            // console.log("_________________________________________")
+            return srav
+        });
+    });
+    console.log(mapPairWise);
+    return mapPairWise
+}
+mainArrForKemeny.forEach(range => {
+   createPairwiseMatrix(range) 
+});
+// createPairwiseMatrix()
+
 // если текущий индекс меньше чем следующий
 mainArr.forEach(element => {
     element
