@@ -1,4 +1,13 @@
 console.log("test")
+// метапрограммирование функций Min и max Для массивов
+Array.prototype.max = function() {
+  return Math.max.apply(null, this);
+};
+
+Array.prototype.min = function() {
+  return Math.min.apply(null, this);
+};
+// * metaend
 
 const mainArr = [
     ["a2", "a3", "a5", "a4", "a1"],
@@ -110,7 +119,7 @@ console.log(medianArr, "медианы")
 console.log(medianArrTemp, "отсортированный")
 
 // ********************************
-//  подсчет рангов по методу кемени
+//  подсчет рангов по методу кемени (метод бинарных отношений)
 // ********************************
 const mainArrForKemeny = [
     ["a2", "a3", "a5", "a4", "a1"],
@@ -140,16 +149,9 @@ function createPairwiseMatrix(rangeArr = ["a2", "a3", "a5", "a4", "a1"]) {
         currentRowA = `a${i+1}`
         return range.map((value, i) => {
             const currentColA = `a${i + 1}`
-            // console.log(rangeArr, "list")
-            // console.log(currentColA, "col")
-            // console.log(currentRowA, "row")
             const indexOfCurrentCol = rangeArr.indexOf(currentColA)
             const indexOfCurrentRow = rangeArr.indexOf(currentRowA)
-            // console.log(indexOfCurrentCol, "index of col");
-            // console.log(indexOfCurrentRow, "index of row");
             const srav = +(indexOfCurrentRow >= indexOfCurrentCol) 
-
-            // console.log("_________________________________________")
             return srav
         });
     });
@@ -159,12 +161,37 @@ function createPairwiseMatrix(rangeArr = ["a2", "a3", "a5", "a4", "a1"]) {
 mainArrForKemeny.forEach(range => {
    createPairwiseMatrix(range) 
 });
+let mbo = {
+    0:  createPairwiseMatrix(mainArrForKemeny[0]).flat(),
+    1:  createPairwiseMatrix(mainArrForKemeny[1]).flat(),
+    2:  createPairwiseMatrix(mainArrForKemeny[2]).flat(),
+    3:  createPairwiseMatrix(mainArrForKemeny[3]).flat(),
+    4:  createPairwiseMatrix(mainArrForKemeny[4]).flat(),
+}
+// console.log(mbo)
+let binaryRelationships = []
+for (let i = 0; i < 5; i++) {
+    binaryRelationships[i] = []
+    for (let j = 0; j < 5; j++) {
+        let x = mbo[i].map(function(item, index) {
+            return Math.abs(item - mbo[j][index])
+        }) 
+        // console.log(x)
+        let result = x.reduce((sum, a) => sum + a)
+        binaryRelationships[i][j] = result
+    }
+}
+console.log(binaryRelationships)
 // createPairwiseMatrix()
+rangeSums = []
 
-// если текущий индекс меньше чем следующий
-mainArr.forEach(element => {
-    element
+binaryRelationships.forEach(range => {
+    rangeSums.push(range.reduce((a,b) => a+b))
 });
+
+const indexOfMinRange = rangeSums.indexOf(rangeSums.min())
+const kemenyMedianBinary = binaryRelationships[indexOfMinRange]
+
 // ********************************
 // вывод результатов
 // ********************************
@@ -184,3 +211,4 @@ for (let i = 0; i < sredArr.length; i++) {
 console.log(sredArr, "изначальный массив средних")
 console.log(sredArrTemp, "отсортированный массив средних")
 console.log(rangTable, "отсортированный")
+console.log(kemenyMedianBinary, "Рэнж медианы кемени по бинарным отношениям")
